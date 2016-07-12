@@ -10,3 +10,13 @@
 (defun set-graph (graph-as-list)
   (setf graph graph-as-list))
 
+(defun find-node (node-name)
+  (defun next-node (unchecked-graph)
+    (cond ((null unchecked-graph) nil)
+          ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
+          (t (next-node (cdr unchecked-graph)))))
+  (next-node graph))
+
+(defun neighbours (node-name)
+  (cdr (find-node node-name)))
+
