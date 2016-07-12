@@ -20,3 +20,8 @@
 (defun neighbours (node-name)
   (cdr (find-node node-name)))
 
+(defun appears-in (target llist)
+  (cond ((null llist) nil)
+        ((equal (car llist) target) t)
+        (t (appears-in (cdr llist)))))
+
