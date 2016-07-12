@@ -25,3 +25,7 @@
         ((equal (car llist) target) t)
         (t (appears-in (cdr llist)))))
 
+(defun is-neighbour (desired given)
+  ; (member desired (find-node given)))
+  (appears-in desired (find-node given)))
+
