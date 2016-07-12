@@ -4,3 +4,6 @@
 		(if (zerop b) 
 			a
 			(gcd b (mod a b)))))
+
+(defun factor (n)
+	)
