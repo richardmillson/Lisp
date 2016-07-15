@@ -1,6 +1,29 @@
 ; find the shortest path between two nodes in an unweighted graph
 ; ie perform a breadth first search
 
+; partial solutions are stored on the queue as ordered lists of node names
+; assume nil cannot be the name of a node
+; check if start and goal are same?
+; call with next item on stack?
+(defun bfs (start goal)
+  (init-queue)
+  (enqueue (list start))
+  (setq visited nil)
+  (defun next-sol ()
+    (let ((front (dequeue)))
+      (cond ((null front) nil)
+            ((equal (car front) goal) (reverse (cons goal front)))
+            ((member (car front) visited) (next-sol))
+            (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) 
+               (next-sol))))))
+
+; (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))
+; (setq x '(1 1 1))
+; (setq y '(2 3 4))
+; (mapcar #'(lambda (x) (cons x y)) x)
+
+
+
 ; the graph is a list of nodes
 ; a node is a list whose first element is the name of the node
 ; and whose remaining elements are the names of any neighbours
