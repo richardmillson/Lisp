@@ -4,18 +4,20 @@
 ; partial solutions are stored on the queue as ordered lists of node names
 ; assume nil cannot be the name of a node
 ; check if start and goal are same?
-; call with next item on stack?
+; check if neighbour is goal sooner?
+
 (defun bfs (start goal)
   (init-queue)
   (enqueue (list start))
   (setq visited nil)
-  (defun next-sol ()
-    (let ((front (dequeue)))
-      (cond ((null front) nil)
-            ((equal (car front) goal) (reverse (cons goal front)))
-            ((member (car front) visited) (next-sol))
-            (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) 
-               (next-sol))))))
+  (defun check-next (front)
+    (cond ((null front) nil) ; exhausted all potential solution paths
+          ((equal (car front) goal) (reverse front)) ; return found solution
+          ((member (car front) visited) (c(quit)heck-next (dequeue)))
+          (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) ; add potential solution paths to queue to be checked later
+             (cons (car front) visited) ; add current node to visited
+             (check-next (dequeue)))))
+  (check-next (dequeue)))
 
 ; (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))
 ; (setq x '(1 1 1))
@@ -27,7 +29,7 @@
 ; the graph is a list of nodes
 ; a node is a list whose first element is the name of the node
 ; and whose remaining elements are the names of any neighbours
-; (set-graph '((a b c) (b a) (c a)))
+; (set-graph '((a b) (b a c) (c b d) (d c)))
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
@@ -77,4 +79,3 @@
   (let ((front-element (front)))
     (setf queue (cdr queue))
     front-element))
-
