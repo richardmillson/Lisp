@@ -4,5 +4,5 @@
   ((lambda (n acc)
      (if (zerop n)
          acc
-         (factorial (- n 1) (* n acc))))
+         (lambda (- n 1) (* n acc))))
    n 1))

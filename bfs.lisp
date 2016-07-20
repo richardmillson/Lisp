@@ -2,7 +2,6 @@
 ; ie perform a breadth first search
 
 ; partial solutions are stored on the queue as ordered lists of node names
-; assume nil cannot be the name of a node
 ; check if start and goal are same?
 ; check if neighbour is goal sooner?
 
@@ -19,18 +18,13 @@
              (check-next (dequeue)))))
   (check-next (dequeue)))
 
-; (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))
-; (setq x '(1 1 1))
-; (setq y '(2 3 4))
-; (mapcar #'(lambda (x) (cons x y)) x)
 
 
-
-; the graph is a list of nodes
+; graph implementation
+; graph is a list of nodes
 ; a node is a list whose first element is the name of the node
 ; and whose remaining elements are the names of any neighbours
 ; (set-graph '((a b) (b a c) (c b d) (d c)))
-; graph implementation
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
@@ -54,6 +48,8 @@
 (defun is-neighbour (desired given)
   ; (member desired (find-node given)))
   (appears-in desired (find-node given)))
+
+
 
 ; queue implementation
 
