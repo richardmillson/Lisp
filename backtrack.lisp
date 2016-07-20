@@ -8,11 +8,15 @@
     (loop while nsl do ; while there are still untested states ie possible solutions
           (cond ((is-goal cs) cs)
                 ((not (has-children cs) ))
-                (t (push (children cs) nsl)
+                (t (push-list (children cs) nsl)
                    (setf cs (top nsl))
                    (push cs sl))))))
 
-
+(defun push-list (llist)
+  (unless (null llist)
+    (push (car llist))
+    (push-list (cdr llist)))
+  t)
 
 ; (defun ttest ()
 ;   (setq x '(a b))

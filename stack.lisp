@@ -13,6 +13,10 @@
     (push-list (cdr llist)))
   t)
 
+; (defun push-list (llist)
+;   (append stack llist)
+;   llist)
+
 (defun top ()
   (car stack))
 
