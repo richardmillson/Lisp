@@ -1,8 +1,8 @@
-; TODO factorial function should not be user accessible, replace defun with flet or labels
+; return n factorial ie n!
 
 (defun fact (n)
-	(defun factorial (n acc)
-		(if (zerop n)
-			acc
-			(factorial (- n 1) (* n acc))))
-	(factorial n 1))
+  ((lambda (n acc)
+     (if (zerop n)
+         acc
+         (factorial (- n 1) (* n acc))))
+   n 1))

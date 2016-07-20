@@ -30,6 +30,7 @@
 ; a node is a list whose first element is the name of the node
 ; and whose remaining elements are the names of any neighbours
 ; (set-graph '((a b) (b a c) (c b d) (d c)))
+; graph implementation
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
