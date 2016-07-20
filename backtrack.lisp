@@ -6,8 +6,11 @@
 (defun backtrack (is-goal)
   (let ((sl start) (nsl start) (de nil) (cs start))
     (loop while nsl do ; while there are still untested states ie possible solutions
-          (when (is-goal cs) cs)
-          )))
+          (cond ((is-goal cs) cs)
+                ((not (has-children cs) ))
+                (t (push (children cs) nsl)
+                   (setf cs (top nsl))
+                   (push cs sl))))))
 
 
 
@@ -28,14 +31,14 @@
 ; % on success, return list of states in path.
 ; if CS has no children (excluding nodes already on DE, SL, and NSL)
 ; then begin
-; while SL is not empty and CS = the first element of SL do
-; begin
-; add CS to DE;
-; % record state as dead end
-; remove first element from SL;
-; %backtrack
-; remove first element from NSL;
-; CS := first element of NSL;
+; 	while SL is not empty and CS = the first element of SL do
+; 	begin
+; 	add CS to DE;
+; 	% record state as dead end
+; 	remove first element from SL;
+; 	%backtrack
+; 	remove first element from NSL;
+; 	CS := first element of NSL;
 ; end
 ; add CS to SL;
 ; end
