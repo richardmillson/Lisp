@@ -1,27 +1,51 @@
-; sl state list, nsl new state list, de dead ends, cs current state
-; needs is-goal predicate which takes states and is nil if state is not a goal
+; implementation of backtrack from George Luger's Artificial Intelligence 6ed p 97
+; sl state list ie states in current path being tried
+; nsl new state list ie unvisited nodes awaiting evaluation
+; de dead ends ie states whose descendants failed to contain a goal
+; cs current state
+; is-goal predicate takes a state and returns nil if not a goal
 
-; uses stack
-
-(defun backtrack (is-goal)
+(defun backtrack (start children is-goal)
   (let ((sl start) (nsl start) (de nil) (cs start))
     (loop while nsl do ; while there are still untested states ie possible solutions
-          (cond ((is-goal cs) cs)
-                ((not (has-children cs) ))
-                (t (push-list (children cs) nsl)
-                   (setf cs (top nsl))
-                   (push cs sl))))))
+          (cond ((is-goal cs) 
+                 cs)
+                ((or (null (children cs))
+                     (intersection (children cs) (append sl nsl de)))
+                 (push cs de)
+                 (pop sl)
+                 (pop nsl)
+                 (setf cs (nth 0 nsl)))
+                (t 
+                  (append (set-difference (children cs) (append sl nsl de)) nsl)
+                  (setf cs (nth 0 nsl))
+                  (push cs sl))))))
 
-(defun push-list (llist)
-  (unless (null llist)
-    (push (car llist))
-    (push-list (cdr llist)))
-  t)
+; (set-graph '((a b) (b a c) (c b d) (d c)))
+; (backtrack 'a #'neighbours #'(lambda (node) (equal node d)))
 
-; (defun ttest ()
-;   (setq x '(a b))
-;   (loop while x do (setf x (cdr x))
-;         finally (print x)))
+(setq graph nil)
+(defun set-graph (graph-as-list)
+  (setf graph graph-as-list))
+
+(defun find-node (node-name)
+  (defun next-node (unchecked-graph)
+    (cond ((null unchecked-graph) nil)
+          ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
+          (t (next-node (cdr unchecked-graph)))))
+  (next-node graph))
+
+(defun neighbours (node-name)
+  (cdr (find-node node-name)))
+
+(defun appears-in (target llist)
+  (cond ((null llist) nil)
+        ((equal (car llist) target) t)
+        (t (appears-in (cdr llist)))))
+
+(defun is-neighbour (desired given)
+  ; (member desired (find-node given)))
+  (appears-in desired (find-node given)))
 
 ; function backtrack;
 ; begin
