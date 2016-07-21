@@ -8,12 +8,14 @@
 ; >(equal (list X) '((A B)))
 ; T
 
+(defun dijkstra (graph start)
+  )
+
+; graph implementation
 ; the graph is a list of nodes
 ; a node is a list whose first element is the name of the node
 ; and whose remaining elements are the names of any neighbours
 ; (set-graph '((a b c) (b a) (c a)))
-
-; graph implementation
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
