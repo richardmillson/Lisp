@@ -1,4 +1,7 @@
-; assume that min starts. 
+; find the minimax analysis of a game of nim
+; nim is a game where players take turns dividing a pile of discrete size
+; where the player that makes an even division loses
+; assume that min starts
 ; hence an odd number of piles mean it is min's turn
 
 (defun play (piles)
