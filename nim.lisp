@@ -13,4 +13,4 @@
 
 ; a losing state is a pile containing one or more 2's and some number of 1's
 (defun lostp (piles)
-  (remove-if #'(lambda (pile) (or (= 1 pile) (= 2 pile))) piles)
+  (remove-if #'(lambda (pile) (or (= 1 pile) (= 2 pile))) piles))
