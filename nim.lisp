@@ -5,10 +5,11 @@
 ; hence an odd number of piles mean it is min's turn
 
 (defun play (piles)
-  (when (lostp piles) ; is losing state
-    (if (oddp (length piles)) ; is min's move
-        t ; max wins
-        nil)) ; is max's move, max loses
+  (if (lostp piles) ; is losing state
+      (if (oddp (length piles)) ; is min's move
+          t ; max wins
+          nil) ; is max's move, max loses
+      (mapcar #'play (children piles)))  
   )
 
 ; a losing state contains only piles of size 1 or 2
@@ -27,3 +28,8 @@
           (setf splits (append splits (list (list lhs (- num lhs)))))
           (setf lhs (+ 1 lhs)))
     splits))
+
+; given a state, generate its children
+; ie all possible splits that can be made given the piles
+(defun children (piles)
+  )
