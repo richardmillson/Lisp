@@ -19,25 +19,11 @@
 (defun dividable (piles)
   (remove-if #'(lambda (pile) (or (= 1 pile) (= 2 pile))) piles))
 
-; return all ways to split a natural number
-; generate all possible pairs
+; return all ways to split a natural number into two parts
 ; exclude even divisions
-(defun all-splits (num)
-  (let ((left 1) (splits nil))
-    (loop while (floor (< left (+ 1 (/ num 2)))) do
-          (setf splits (append splits (list (list left (- num left)))))
-          (setf left (+ 1 left)))
+(defun split (num)
+  (let ((lhs 1) (splits nil))
+    (loop while (< lhs (/ num 2)) do
+          (setf splits (append splits (list (list lhs (- num lhs)))))
+          (setf lhs (+ 1 lhs)))
     splits))
-; (enqueue-list (mapcar #'(lambda (x) (cons x front)) (set)))
-
-; (defun ttest ()
-;   (let ((x 5))
-;   (loop while (< x 7) do
-;         (print x)
-;         (setf x (+ 1 x))
-;         finally x)
-;   x))
-
-; (defun ttest ()
-;   (let ((x 5))
-;   (print x)))
