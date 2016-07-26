@@ -7,10 +7,14 @@
 (defun play (piles)
   (when (lostp piles) ; is losing state
     (if (oddp (length piles)) ; is min's move
-        1
-        0)) ; is max's move
+        1 ; min loses, return 1 to delineate win for max
+        0)) ; is max's move, max loses, return 0 to delineate loss for max
   )
 
-; a losing state is a pile containing one or more 2's and some number of 1's
+; a losing state contains only piles of size 1 or 2
 (defun lostp (piles)
-  (not (remove-if #'(lambda (pile) (or (= 1 pile) (= 2 pile))) piles)))
+  (not (dividable piles)))
+
+; return the piles that can be further divided
+(defun dividable (piles)
+  (remove-if #'(lambda (pile) (or (= 1 pile) (= 2 pile))) piles))
