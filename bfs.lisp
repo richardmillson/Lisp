@@ -12,7 +12,7 @@
   (defun check-next (front)
     (cond ((null front) nil) ; exhausted all potential solution paths
           ((equal (car front) goal) (reverse front)) ; return found solution
-          ((member (car front) visited) (c(quit)heck-next (dequeue)))
+          ((member (car front) visited) (check-next (dequeue)))
           (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) ; add potential solution paths to queue to be checked later
              (cons (car front) visited) ; add current node to visited
              (check-next (dequeue)))))
