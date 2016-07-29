@@ -29,7 +29,5 @@
   ; (member desired (find-node given)))
   (appears-in desired (find-node given)))
 
-(defun path (graph start)
-  (let ((current_best 1000) ; needs to be large
-        )
-    ))
+(defun list-nodes (graph)
+  (mapcar #'car graph))
