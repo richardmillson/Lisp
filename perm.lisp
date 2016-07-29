@@ -1,12 +1,20 @@
 ; implement permutations
 
+; given a permutation in disjoint cycle representation
 ; return the sign of a permutation
 ; sgn(alpha) = (-1)^{n-r}
 ; alpha is a permutation
 ; n is the cardinality of the symmetric group that alpha belongs to ie S_n
 ; r is the number of disjoint cycles in alpha's complete factorization
 (defun sgn (alpha)
-  nil)
+  (let ((n (length (flatten alpha)))
+        (r (length alpha)))
+    ))
+
+(defun flatten (llist)
+    (cond ((null llist) nil)
+        ((atom llist) (list llist))
+        (t (append (flatten (car llist)) (flatten (cdr llist))))))
 
 ; (defun evenp (alpha)
 ;   (= 1 (sgn alpha)))
