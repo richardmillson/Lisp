@@ -33,6 +33,7 @@
 ;   (= -1 (sgn alpha)))
 
 ; determine if two cycles alpha and beta are disjoint
+; TODO cycle representation is not unique, need to detect this
 (defun disjointp (alpha beta)
   (intersection alpha beta))
 
