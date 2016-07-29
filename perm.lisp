@@ -9,7 +9,7 @@
 (defun sgn (alpha)
   (let ((n (length (flatten alpha)))
         (r (length alpha)))
-    ))
+    (power -1 (- n r))))
 
 (defun flatten (llist)
   (cond ((null llist) nil)
