@@ -9,7 +9,7 @@
 (defun sgn (alpha)
   (let ((n (length (flatten alpha)))
         (r (length alpha)))
-    (power -1 (- n r))))
+    (power -1 (mod (- n r) 2))))
 
 (defun flatten (llist)
   (cond ((null llist) nil)
@@ -23,6 +23,8 @@
                          acc
                          (exponent b (- n 1) (* b acc)))))
           (exponent b n 1)))
+
+; parity
 
 ; (defun evenp (alpha)
 ;   (= 1 (sgn alpha)))
