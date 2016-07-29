@@ -47,11 +47,12 @@
 ; X_n = {1, 2, ..., n}
 ; move(alpha) = {i in X_n : alpha(i) != i}
 (defun move (alpha)
-  nil)
+  (remove-if #'(lambda (cycle) (= (length cycle) 1)) alpha))
 
+; return the elements of X_n that are fixed by alpha
 ; fix(alpha) = {i in X_n : alpha(i) = i}
 (defun fix (alpha)
-  nil)
+  (remove-if-not #'(lambda (cycle) (= (length cycle) 1)) alpha))
 
 ; given a permutation alpha
 ; graph representation of alpha
