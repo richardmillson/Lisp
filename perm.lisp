@@ -14,9 +14,9 @@
 ; (defun oddp (alpha)
 ;   (= -1 (sgn alpha)))
 
-; determine if 
+; determine if two cycles alpha and beta are disjoint
 (defun disjointp (alpha beta)
-  nil)
+  (intersection alpha beta))
 
 ; return the orbit of element i in alpha
 ; orbit_{alpha}(i) = {\alpha^k(i) : k >= 0} subset X_n
