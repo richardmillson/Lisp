@@ -2,9 +2,7 @@
 
 (defun fact (n)
   (labels ((factorial (n acc)
-                    (if (zerop n)
-                        acc
-                        (factorial (- n 1) (* n acc))))))
-  (factorial n 1))
-
-; (factorial 3 10)
+                      (if (zerop n)
+                          acc
+                          (factorial (- n 1) (* n acc)))))
+          (factorial n 1)))
