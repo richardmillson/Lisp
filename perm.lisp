@@ -12,9 +12,17 @@
     ))
 
 (defun flatten (llist)
-    (cond ((null llist) nil)
+  (cond ((null llist) nil)
         ((atom llist) (list llist))
         (t (append (flatten (car llist)) (flatten (cdr llist))))))
+
+; raise base b to the exponent n ie b^n
+(defun power (b n)
+  (labels ((exponent (b n acc)
+                     (if (zerop n)
+                         acc
+                         (exponent b (- n 1) (* b acc)))))
+          (exponent b n 1)))
 
 ; (defun evenp (alpha)
 ;   (= 1 (sgn alpha)))
@@ -31,7 +39,8 @@
 (defun orbit (i alpha)
   nil)
 
-(defun factorization)
+(defun factorization ()
+  nil)
 
 ; X_n = {1, 2, ..., n}
 ; move(alpha) = {i in X_n : alpha(i) != i}
