@@ -11,11 +11,12 @@
 (defun dijkstra (graph start)
   )
 
-; graph implementation
+; weighted directed graph implementation
 ; the graph is a list of nodes
 ; a node is a list whose first element is the name of the node
-; and whose remaining elements are the names of any neighbours
-; (set-graph '((a b c) (b a) (c a)))
+; and whose remaining elements are pairs of a neighbours name 
+; and cost the to that neighbour
+; (set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
