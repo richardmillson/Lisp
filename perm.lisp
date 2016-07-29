@@ -39,7 +39,7 @@
 ; return the orbit of element i in alpha
 ; orbit_{alpha}(i) = {\alpha^k(i) : k >= 0} subset X_n
 (defun orbit (i alpha)
-  nil)
+  (remove-if-not #'(lambda (cycle) (member i cycle)) alpha))
 
 (defun factorization ()
   nil)
