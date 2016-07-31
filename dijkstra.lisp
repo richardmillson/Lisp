@@ -9,9 +9,65 @@
 ; T
 
 (defun dijkstra (graph start)
-  (setq dijkstra (list start 0))
-  
-  )
+  (init-costs graph)
+  (update-cost start 0)
+  (init-predecessors graph)
+  (init-visited)
+  (init-candidates start)
+  (loop while candidates do
+        (let ((current (min-candidate)))
+          (add-visited current)
+          (loop for neighbour in (neighbours current) do
+                nil))))
+
+; keep track of the smallest cost to get to each node found by dijkstra
+; note that all paths start at the start node called in dijkstra
+(defun init-costs (graph)
+  (let ((impossible (+ 1 (sum (remove-if-not #'integerp (flatten graph))))))
+    (setq costs (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
+
+(defun flatten (llist)
+    (cond ((null llist) nil)
+        ((atom llist) (list llist))
+        (t (append (flatten (car llist)) (flatten (cdr llist))))))
+
+(defun sum (llist)
+  (labels ((ssum (lllist acc)
+                 (if (null lllist)
+                     acc
+                     (ssum (cdr lllist) (+ (car lllist) acc)))))
+          (ssum llist 0)))
+
+(defun update-cost (end cost)
+  (setq costs (append (remove-if #'(lambda (node) (equal (car node) end)) costs) (list (list end cost)))))
+
+(defun cost (target)
+  (cadar (remove-if-not #'(lambda (node) (equal (car node) target)) costs)))
+
+; keep track of the predecessor of each node on the shortest path to the start node
+(defun init-predecessors (graph)
+  (setq predecessors (mapcar #'(lambda (node) (list node nil)) (list-nodes graph))))
+
+(defun update-predecessor (end predecessor)
+  (setq predecessors (append (remove-if #'(lambda (node) (equal (car node) end)) predecessors) (list (list end predecessor)))))
+
+(defun init-visited ()
+  (setq visited nil))
+
+(defun add-visited (node)
+  (setq visited (append visited (list node))))
+
+(defun init-candidates (start)
+  (setq candidates (list start)))
+
+(defun add-candidate (node)
+  (setq candidate (append candidate (list node))))
+
+(defun min-candidate ()
+  (setq candidates (sort candidates (lambda (left right)  (< (cost left) (cost right)))))
+  (pop candidates))
+
+
 
 ; weighted directed graph implementation
 ; the graph is a list of nodes
@@ -45,3 +101,10 @@
 
 (defun list-nodes (graph)
   (mapcar #'car graph))
+
+; tests
+
+(set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
+; (init-costs graph)
+; (update-cost 'a 0)
+(dijkstra graph 'a)
