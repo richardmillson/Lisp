@@ -1,47 +1,50 @@
 ; Dijkstra's algorithm for finding the shortest path between nodes in a weighted graph
 
-; >(setq X '(A B))
-; >(member X '((A B)))
-; NIL
-; >(member X (list X))
-; ((A B))
-; >(equal (list X) '((A B)))
-; T
-
 (defun dijkstra (graph start)
-  (init-costs graph)
-  (update-cost start 0)
+  (init-path-costs graph)
+  (update-path-cost start 0)
   (init-predecessors graph)
   (init-visited)
   (init-candidates start)
   (loop while candidates do
         (let ((current (min-candidate)))
           (add-visited current)
-          (loop for neighbour in (set-difference (neighbours current) visited) do
-                (cond ()( ())
-                      ))))
+          (loop for neighbour in (set-difference (neighbours current) visited :test #'equal) do
+                (cond (< (+ (path-cost (name current)) 
+                            (cost-to-neighbour neighbour))
+                         (path-cost neighbour)) 
+                      ((update-path-cost (name neighbour)
+                                         (+ (path-cost (name current)) 
+                                            (cost-to-neighbour neighbour)))
+                       (update-predecessor (name neighbour)
+                                           (name current)))
+                      ((not (member (name neighbour) visited))
+                       (add-visited (name neighbour)))))
+          finally predecessors)))
 
 ; keep track of the smallest cost to get to each node found by dijkstra
 ; note that all paths start at the start node called in dijkstra
-(defun init-costs (graph)
+(defun init-path-costs (graph)
   (let ((impossible (+ 1 (apply '+ (remove-if-not #'integerp (flatten graph))))))
-    (setq costs (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
+    (setq path-path-costs (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
 
 (defun flatten (llist)
-    (cond ((null llist) nil)
+  (cond ((null llist) nil)
         ((atom llist) (list llist))
         (t (append (flatten (car llist)) (flatten (cdr llist))))))
 
-(defun update-cost (end cost)
-  (setq costs (append (remove-if #'(lambda (node) (equal (car node) end)) costs) (list (list end cost)))))
+(defun update-path-cost (end path-cost)
+  (setq path-costs (append (remove-if #'(lambda (node) (equal (car node) end)) path-costs) (list (list end path-cost)))))
 
-(defun cost (target)
-  (cadar (remove-if-not #'(lambda (node) (equal (car node) target)) costs)))
+; takes the name of a node
+(defun path-cost (target)
+  (cadar (remove-if-not #'(lambda (node) (equal (car node) target)) path-costs)))
 
 ; keep track of the predecessor of each node on the shortest path to the start node
 (defun init-predecessors (graph)
   (setq predecessors (mapcar #'(lambda (node) (list node nil)) (list-nodes graph))))
 
+; end and predecessor are names of a nodes
 (defun update-predecessor (end predecessor)
   (setq predecessors (append (remove-if #'(lambda (node) (equal (car node) end)) predecessors) (list (list end predecessor)))))
 
@@ -55,12 +58,18 @@
   (setq candidates (list start)))
 
 (defun add-candidate (node)
-  (setq candidate (append candidate (list node))))
+  (setq candidate (append candidate (list node)))  
+  (setq candidates (sort candidates (lambda (left right)  (< (path-cost left) (path-cost right))))))
 
 (defun min-candidate ()
-  (setq candidates (sort candidates (lambda (left right)  (< (cost left) (cost right)))))
   (pop candidates))
 
+; nodes are stored as (name cost)
+(defun cost-to-neighbour (node)
+  (cadr node))
+
+(defun name (node)
+  (car node))
 
 
 ; weighted directed graph implementation
@@ -99,6 +108,6 @@
 ; tests
 
 (set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
-; (init-costs graph)
-; (update-cost 'a 0)
+; (init-path-s graph)
+; (update-path- 'a 0)
 (dijkstra graph 'a)
