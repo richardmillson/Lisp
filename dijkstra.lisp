@@ -22,8 +22,6 @@
                 (when (not (member neighbour candidates)) (add-candidate neighbour))
                 finally predecessors))))
 
-(defun only-names (list-nodes))
-
 ;;; keep track of the smallest cost to get to each node found by dijkstra
 ;;; note that all paths start at the start node called in dijkstra
 (defun init-path-costs (graph)
@@ -59,6 +57,14 @@
   (setq predecessors (append (remove-if #'(lambda (node) (equal (car node) end))
                                         predecessors) 
                              (list (list end predecessor)))))
+
+(defun get-predecessor (start)
+  (cadr (find-if #'(lambda (node) (equal (car node) start)) predecessors)))
+
+;;; return the shortest path 
+(defun get-path (node)
+  (cond ((null node) nil)
+        (t (append (list node) (get-path (get-predecessor node))))))
 
 (defun init-visited ()
   (setq visited nil))
