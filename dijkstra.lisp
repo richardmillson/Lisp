@@ -17,26 +17,20 @@
   (loop while candidates do
         (let ((current (min-candidate)))
           (add-visited current)
-          (loop for neighbour in (neighbours current) do
-                nil))))
+          (loop for neighbour in (set-difference (neighbours current) visited) do
+                (cond ()( ())
+                      ))))
 
 ; keep track of the smallest cost to get to each node found by dijkstra
 ; note that all paths start at the start node called in dijkstra
 (defun init-costs (graph)
-  (let ((impossible (+ 1 (sum (remove-if-not #'integerp (flatten graph))))))
+  (let ((impossible (+ 1 (apply '+ (remove-if-not #'integerp (flatten graph))))))
     (setq costs (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
 
 (defun flatten (llist)
     (cond ((null llist) nil)
         ((atom llist) (list llist))
         (t (append (flatten (car llist)) (flatten (cdr llist))))))
-
-(defun sum (llist)
-  (labels ((ssum (lllist acc)
-                 (if (null lllist)
-                     acc
-                     (ssum (cdr lllist) (+ (car lllist) acc)))))
-          (ssum llist 0)))
 
 (defun update-cost (end cost)
   (setq costs (append (remove-if #'(lambda (node) (equal (car node) end)) costs) (list (list end cost)))))
