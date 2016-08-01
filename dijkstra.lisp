@@ -15,17 +15,11 @@
           (loop for neighbour in (set-difference (list-nodes (neighbours current)) 
                                                  visited 
                                                  :test #'equal)
-                do 
-                (cond 
-                  ((< (+ (path-cost current)
-                         (cost-to-neighbour neighbour))
-                      (path-cost neighbour))
-                   (update-path-cost neighbour
-                                     (+ (path-cost current) 
-                                        (cost-to-neighbour neighbour)))
-                   (update-predecessor neighbour current))
-                  ((not (member neighbour visited))
-                   (add-visited neighbour)))
+                do
+                (when (< (+ (path-cost current) (cost-to-neighbour current neighbour)) (path-cost neighbour))
+                  (update-path-cost neighbour (+ (path-cost current) (cost-to-neighbour current neighbour)))
+                  (update-predecessor neighbour current))
+                (when (not (member neighbour candidates)) (add-candidate neighbour))
                 finally predecessors))))
 
 (defun only-names (list-nodes))
@@ -85,8 +79,8 @@
   (pop candidates))
 
 ;;; nodes are stored as (name cost)
-(defun cost-to-neighbour (node)
-  (cadr node))
+(defun cost-to-neighbour (start end)
+  (cadr (find-if #'(lambda (node) (equal (car node) end)) (neighbours start))))
 
 (defun name (node)
   (car node))
@@ -128,14 +122,14 @@
 ; tests
 
 (set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
-(init-path-costs graph)
-(update-path-cost 'a 0)
+; (init-path-costs graph)
+; (update-path-cost 'a 0)
+; (init-predecessors graph)
+; (init-visited)
+; (init-candidates 'a)
+(print (path-cost 'a))
 (print path-costs)
-(init-predecessors graph)
 (print predecessors)
-(init-visited)
+(dijkstra graph 'a)
 (print visited)
-(init-candidates 'a)
 (print candidates)
-(path-cost 'a)
-; (dijkstra graph 'a)
