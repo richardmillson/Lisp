@@ -10,14 +10,15 @@
   (init-queue)
   (enqueue (list start))
   (setq visited nil)
-  (defun check-next (front)
-    (cond ((null front) nil) ; exhausted all potential solution paths, none found
-          ((equal (car front) goal) (reverse front)) ; return found solution
-          ((member (car front) visited) (check-next (dequeue)))
-          (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) ; add potential solution paths to queue to be checked later
-             (cons (car front) visited) ; add current node to visited
-             (check-next (dequeue)))))
-  (check-next (dequeue)))
+  (labels ((check-next (front)
+                       (format nil "~a" front)
+                       (cond ((null front) nil) ; exhausted all potential solution paths, none found
+                             ((equal (car front) goal) (reverse front)) ; return found solution
+                             ((member (car front) visited) (check-next (dequeue)))
+                             (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) ; add potential solution paths to queue to be checked later
+                                (cons (car front) visited) ; add current node to visited
+                                (check-next (dequeue))))))
+          (check-next (dequeue))))
 
 
 
@@ -32,11 +33,11 @@
   (setf graph graph-as-list))
 
 (defun find-node (node-name)
-  (defun next-node (unchecked-graph)
-    (cond ((null unchecked-graph) nil)
-          ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
-          (t (next-node (cdr unchecked-graph)))))
-  (next-node graph))
+  (labels ((next-node (unchecked-graph)
+                      (cond ((null unchecked-graph) nil)
+                            ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
+                            (t (next-node (cdr unchecked-graph))))))
+          (next-node graph)))
 
 (defun neighbours (node-name)
   (cdr (find-node node-name)))
@@ -80,3 +81,12 @@
   (let ((front-element (front)))
     (setf queue (cdr queue))
     front-element))
+
+; tests
+
+(set-graph '((a b) (b a c) (c b d) (d c)))
+(print graph)
+(print (bfs 'a 'd))
+; (format nil "~a" graph)
+; (format nil "~a" (bfs 'a 'd))
+; (bfs 'a 'z)

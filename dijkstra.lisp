@@ -62,10 +62,10 @@
 
 ;;; return the shortest path 
 (defun get-path (node)
-  (defun get-reversed-path (nnode)
-    (cond ((null nnode) nil)
-          (t (append (list nnode) (get-reversed-path (get-predecessor nnode))))))
-  (reverse (get-reversed-path node)))
+  (labels ((get-reversed-path (nnode)
+                              (cond ((null nnode) nil)
+                                    (t (append (list nnode) (get-reversed-path (get-predecessor nnode)))))))
+          (reverse (get-reversed-path node))))
 
 ;;; shortest path from start to end
 (defun shortest (start end)
@@ -115,11 +115,11 @@
   (setf graph graph-as-list))
 
 (defun find-node (node-name)
-  (defun next-node (unchecked-graph)
-    (cond ((null unchecked-graph) nil)
-          ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
-          (t (next-node (cdr unchecked-graph)))))
-  (next-node graph))
+  (labels ((next-node (unchecked-graph)
+        (cond ((null unchecked-graph) nil)
+              ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
+              (t (next-node (cdr unchecked-graph))))))
+  (next-node graph)))
 
 (defun neighbours (node-name)
   (cdr (find-node node-name)))
