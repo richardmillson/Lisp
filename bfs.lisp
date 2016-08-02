@@ -1,16 +1,17 @@
-; find the shortest path between two nodes in an unweighted graph
-; ie perform a breadth first search
+;;; find the shortest path between two nodes in an unweighted graph
+;;; ie perform a breadth first search
 
-; partial solutions are stored on the queue as ordered lists of node names
-; check if start and goal are same?
-; check if neighbour is goal sooner?
+;;; partial solutions are stored on the queue as ordered lists of node names
+;;; check if start and goal are same?
+;;; check if neighbour is goal sooner?
+;;; can this handle cases where no path exists?
 
 (defun bfs (start goal)
   (init-queue)
   (enqueue (list start))
   (setq visited nil)
   (defun check-next (front)
-    (cond ((null front) nil) ; exhausted all potential solution paths
+    (cond ((null front) nil) ; exhausted all potential solution paths, none found
           ((equal (car front) goal) (reverse front)) ; return found solution
           ((member (car front) visited) (check-next (dequeue)))
           (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) ; add potential solution paths to queue to be checked later
@@ -20,11 +21,11 @@
 
 
 
-; graph implementation
-; graph is a list of nodes
-; a node is a list whose first element is the name of the node
-; and whose remaining elements are the names of any neighbours
-; (set-graph '((a b) (b a c) (c b d) (d c)))
+;;; graph implementation
+;;; graph is a list of nodes
+;;; a node is a list whose first element is the name of the node
+;;; and whose remaining elements are the names of any neighbours
+;;; >(set-graph '((a b) (b a c) (c b d) (d c)))
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
@@ -49,9 +50,12 @@
   ; (member desired (find-node given)))
   (appears-in desired (find-node given)))
 
+(defun list-nodes (graph)
+  (mapcar #'car graph))
 
 
-; queue implementation
+
+;;; queue implementation
 
 (defun init-queue ()
   (setq queue nil))

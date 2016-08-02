@@ -1,3 +1,4 @@
+
 ;;; dijkstra's algorithm 
 ;;; find the shortest path between nodes in a weighted graph
 (defun dijkstra (graph start)
@@ -6,12 +7,10 @@
   (init-predecessors graph)
   (init-visited)
   (init-candidates start)
-  ;; current is a name
+  ;; use names not node objects
   (loop while candidates do
         (let ((current (min-candidate)))
           (add-visited current)
-          ; fix visited is only names, neighbours is node type
-          ; rewrite cost-to
           (loop for neighbour in (set-difference (list-nodes (neighbours current)) 
                                                  visited 
                                                  :test #'equal)
@@ -19,11 +18,11 @@
                 (when (< (+ (path-cost current) (cost-to-neighbour current neighbour)) (path-cost neighbour))
                   (update-path-cost neighbour (+ (path-cost current) (cost-to-neighbour current neighbour)))
                   (update-predecessor neighbour current))
-                (when (not (member neighbour candidates)) (add-candidate neighbour))
-                finally predecessors))))
+                (when (not (member neighbour candidates)) (add-candidate neighbour)))))
+  predecessors)
 
-;;; keep track of the smallest cost to get to each node found by dijkstra
-;;; note that all paths start at the start node called in dijkstra
+;;; remember the smallest cost to get to each node found by dijkstra
+;;; all paths start at the start node called in dijkstra
 (defun init-path-costs (graph)
   (let ((impossible (+ 1 (apply '+ (remove-if-not #'integerp 
                                                   (flatten graph))))))
@@ -47,12 +46,12 @@
   (cadar (remove-if-not #'(lambda (node) (equal (car node) target)) 
                         path-costs)))
 
-;;; keep track of the predecessor of each node on the shortest path to the start node
+;;; remember the predecessor of each node on the shortest path to the start node
 (defun init-predecessors (graph)
   (setq predecessors (mapcar #'(lambda (node) (list node nil)) 
                              (list-nodes graph))))
 
-;;; end and predecessor are names of a nodes
+;;; end and predecessor are names of nodes
 (defun update-predecessor (end predecessor)
   (setq predecessors (append (remove-if #'(lambda (node) (equal (car node) end))
                                         predecessors) 
@@ -63,8 +62,20 @@
 
 ;;; return the shortest path 
 (defun get-path (node)
-  (cond ((null node) nil)
-        (t (append (list node) (get-path (get-predecessor node))))))
+  (defun get-reversed-path (nnode)
+    (cond ((null nnode) nil)
+          (t (append (list nnode) (get-reversed-path (get-predecessor nnode))))))
+  (reverse (get-reversed-path node)))
+
+;;; shortest path from start to end
+(defun shortest (start end)
+  (dijkstra graph start)
+  (get-path end))
+
+;;; print the shortest path from start to end
+(defun print-shortest (start end)
+  (dijkstra graph start)
+  (format nil "the minimum path between ~a and ~a is ~a with cost = ~a" start end (get-path end) (path-cost end)))
 
 (defun init-visited ()
   (setq visited nil))
@@ -84,7 +95,7 @@
 (defun min-candidate ()
   (pop candidates))
 
-;;; nodes are stored as (name cost)
+;;; nodes stored as (name cost)
 (defun cost-to-neighbour (start end)
   (cadr (find-if #'(lambda (node) (equal (car node) end)) (neighbours start))))
 
@@ -97,7 +108,7 @@
 ;;; a node is a list whose first element is the name of the node
 ;;; and whose remaining elements are pairs of a neighbours name 
 ;;; and cost the to that neighbour
-;;; (set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
+;;; >(set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
 
 (setq graph nil)
 (defun set-graph (graph-as-list)
@@ -125,6 +136,8 @@
 (defun list-nodes (graph)
   (mapcar #'car graph))
 
+
+
 ; tests
 
 (set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
@@ -133,9 +146,10 @@
 ; (init-predecessors graph)
 ; (init-visited)
 ; (init-candidates 'a)
-(print (path-cost 'a))
-(print path-costs)
-(print predecessors)
-(dijkstra graph 'a)
-(print visited)
-(print candidates)
+; (dijkstra graph 'a)
+; (print (path-cost 'a))
+; (print path-costs)
+; (print predecessors)
+; (print visited)
+; (print candidates)
+(shortest 'a 'd)
