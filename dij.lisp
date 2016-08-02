@@ -1,7 +1,7 @@
 
 ;;; dijkstra's algorithm 
 ;;; find the shortest path between nodes in a weighted graph
-(defun dijkstra (graph start)
+(defun dij (graph start)
   (init-path-costs graph)
   (update-path-cost start 0)
   (init-predecessors graph)
@@ -11,10 +11,7 @@
   (loop while candidates do
         (let ((current (min-candidate)))
           (add-visited current)
-          (loop for neighbour in (set-difference (list-nodes (neighbours current)) 
-                                                 visited 
-                                                 :test #'equal)
-                do
+          (loop for neighbour in (set-difference (list-nodes (neighbours current)) visited :test #'equal) do
                 (when (< (+ (path-cost current) (cost-to-neighbour current neighbour)) (path-cost neighbour))
                   (update-path-cost neighbour (+ (path-cost current) (cost-to-neighbour current neighbour)))
                   (update-predecessor neighbour current))
@@ -24,11 +21,12 @@
 ;;; remember the smallest cost to get to each node found by dijkstra
 ;;; all paths start at the start node called in dijkstra
 (defun init-path-costs (graph)
-  (let ((impossible (+ 1 (apply '+ (remove-if-not #'integerp 
-                                                  (flatten graph))))))
+  (let ((impossible (impossible-cost graph)))
     (setq path-costs 
-          (mapcar #'(lambda (node) (list node impossible)) 
-                  (list-nodes graph)))))
+          (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
+
+(defun impossible-cost (graph)
+  (+ 1 (apply '+ (remove-if-not #'integerp (flatten graph)))))
 
 (defun flatten (llist)
   (cond ((null llist) nil)
@@ -68,14 +66,17 @@
           (reverse (get-reversed-path node))))
 
 ;;; shortest path from start to end
-(defun shortest (start end)
-  (dijkstra graph start)
+(defun shortest-dij (start end)
+  (dij graph start)
   (get-path end))
 
 ;;; print the shortest path from start to end
-(defun print-shortest (start end)
-  (dijkstra graph start)
-  (format nil "the minimum path between ~a and ~a is ~a with cost = ~a" start end (get-path end) (path-cost end)))
+(defun print-dij (start end)  
+  (dij graph start)
+  (cond ((not (member start (list-nodes graph))) (format nil "~a does not appear in the graph" start))
+        ((not (member end (list-nodes graph))) (format nil "~a does not appear in the graph" end))
+        ((null (path-cost end)) (format nil "no path from between ~a and ~a exists" start end))
+        (t (format nil "the minimum path between ~a and ~a is ~a with cost = ~a" start end (get-path end) (path-cost end)))))
 
 (defun init-visited ()
   (setq visited nil))
@@ -116,10 +117,10 @@
 
 (defun find-node (node-name)
   (labels ((next-node (unchecked-graph)
-        (cond ((null unchecked-graph) nil)
-              ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
-              (t (next-node (cdr unchecked-graph))))))
-  (next-node graph)))
+                      (cond ((null unchecked-graph) nil)
+                            ((equal node-name (caar unchecked-graph)) (car unchecked-graph))
+                            (t (next-node (cdr unchecked-graph))))))
+          (next-node graph)))
 
 (defun neighbours (node-name)
   (cdr (find-node node-name)))
@@ -141,15 +142,4 @@
 ; tests
 
 (set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
-; (init-path-costs graph)
-; (update-path-cost 'a 0)
-; (init-predecessors graph)
-; (init-visited)
-; (init-candidates 'a)
-; (dijkstra graph 'a)
-; (print (path-cost 'a))
-; (print path-costs)
-; (print predecessors)
-; (print visited)
-; (print candidates)
-(shortest 'a 'd)
+(print-dij 'a 'd)

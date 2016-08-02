@@ -1,3 +1,4 @@
+
 ;;; find the shortest path between two nodes in an unweighted graph
 ;;; ie perform a breadth first search
 
@@ -19,6 +20,13 @@
                                 (setq visited (cons (car front) visited)) ; add current node to visited
                                 (check-next (dequeue))))))
           (check-next (dequeue))))
+
+;;; print the shortest path from start to end
+(defun print-bfs (start end)
+  (let ((solution (bfs start end)))
+    (if solution
+        (format nil "the minimum path between ~a and ~a is ~a with cost = ~a" start end solution (- (length solution) 1))
+        (format nil "no solution exists"))))
 
 
 
@@ -82,11 +90,10 @@
     (setf queue (cdr queue))
     front-element))
 
+
+
 ; tests
 
 (set-graph '((a b) (b a c) (c b d) (d c)))
-(print graph)
-(print (bfs 'a 'd))
-; (format nil "~a" graph)
-; (format nil "~a" (bfs 'a 'd))
-; (bfs 'a 'z)
+(print-bfs 'a 'd)
+(print-bfs 'a 'z)
