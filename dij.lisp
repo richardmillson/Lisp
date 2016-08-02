@@ -1,6 +1,11 @@
 
-;;; dijkstra's algorithm 
-;;; find the shortest path between nodes in a weighted graph
+;;; dijkstra's algorithm
+;;; find the shortest path between nodes in a weighted, directed graph
+;;; >(set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
+;;; >(print-dij 'a 'd)
+;;; >(print-dij 'a 'z)
+;;; >(print-dij 'z 'd)
+;;; >(print-dij 'b 'a)
 (defun dij (graph start)
   (init-path-costs graph)
   (update-path-cost start 0)
@@ -18,12 +23,11 @@
                 (when (not (member neighbour candidates)) (add-candidate neighbour)))))
   predecessors)
 
-;;; remember the smallest cost to get to each node found by dijkstra
-;;; all paths start at the start node called in dijkstra
+;;; remember the smallest cost to get to each node
+;;; all paths start at the start node called in dij
 (defun init-path-costs (graph)
   (let ((impossible (impossible-cost graph)))
-    (setq path-costs 
-          (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
+    (setq path-costs (mapcar #'(lambda (node) (list node impossible)) (list-nodes graph)))))
 
 (defun impossible-cost (graph)
   (+ 1 (apply '+ (remove-if-not #'integerp (flatten graph)))))
@@ -35,25 +39,19 @@
 
 (defun update-path-cost (end path-cost)
   (setq path-costs 
-        (append (remove-if #'(lambda (node) (equal (car node) end)) 
-                           path-costs) 
-                (list (list end path-cost)))))
+        (append (remove-if #'(lambda (node) (equal (car node) end)) path-costs) (list (list end path-cost)))))
 
 ;;; takes the name of a node
 (defun path-cost (target)
-  (cadar (remove-if-not #'(lambda (node) (equal (car node) target)) 
-                        path-costs)))
+  (cadar (remove-if-not #'(lambda (node) (equal (car node) target)) path-costs)))
 
 ;;; remember the predecessor of each node on the shortest path to the start node
 (defun init-predecessors (graph)
-  (setq predecessors (mapcar #'(lambda (node) (list node nil)) 
-                             (list-nodes graph))))
+  (setq predecessors (mapcar #'(lambda (node) (list node nil)) (list-nodes graph))))
 
 ;;; end and predecessor are names of nodes
 (defun update-predecessor (end predecessor)
-  (setq predecessors (append (remove-if #'(lambda (node) (equal (car node) end))
-                                        predecessors) 
-                             (list (list end predecessor)))))
+  (setq predecessors (append (remove-if #'(lambda (node) (equal (car node) end)) predecessors) (list (list end predecessor)))))
 
 (defun get-predecessor (start)
   (cadr (find-if #'(lambda (node) (equal (car node) start)) predecessors)))
@@ -75,7 +73,7 @@
   (dij graph start)
   (cond ((not (member start (list-nodes graph))) (format nil "~a does not appear in the graph" start))
         ((not (member end (list-nodes graph))) (format nil "~a does not appear in the graph" end))
-        ((null (path-cost end)) (format nil "no path from between ~a and ~a exists" start end))
+        ((= (path-cost end) (impossible-cost graph)) (format nil "no path between ~a and ~a exists" start end))
         (t (format nil "the minimum path between ~a and ~a is ~a with cost = ~a" start end (get-path end) (path-cost end)))))
 
 (defun init-visited ()
@@ -89,9 +87,7 @@
 
 (defun add-candidate (node)
   (setq candidates (append candidates (list node)))  
-  (setq candidates (sort candidates 
-                         (lambda (left right) (< (path-cost left) 
-                                                 (path-cost right))))))
+  (setq candidates (sort candidates (lambda (left right) (< (path-cost left) (path-cost right))))))
 
 (defun min-candidate ()
   (pop candidates))
@@ -100,17 +96,15 @@
 (defun cost-to-neighbour (start end)
   (cadr (find-if #'(lambda (node) (equal (car node) end)) (neighbours start))))
 
-(defun name (node)
-  (car node))
 
 
-;;; weighted directed graph implementation
-;;; the graph is a list of nodes
+;;; graph implementation
+;;; graph is a list of nodes
+;;; for weighted, directed graph
 ;;; a node is a list whose first element is the name of the node
 ;;; and whose remaining elements are pairs of a neighbours name 
 ;;; and cost the to that neighbour
-;;; >(set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
-
+;;; >(set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))(setq graph nil)
 (setq graph nil)
 (defun set-graph (graph-as-list)
   (setf graph graph-as-list))
@@ -136,10 +130,3 @@
 
 (defun list-nodes (graph)
   (mapcar #'car graph))
-
-
-
-; tests
-
-(set-graph '((a (b 3)) (b (c 1) (d 5)) (c (d 2)) (d (b 2))))
-(print-dij 'a 'd)

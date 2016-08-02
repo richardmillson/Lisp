@@ -1,12 +1,10 @@
 
-;;; find the shortest path between two nodes in an unweighted graph
-;;; ie perform a breadth first search
-
+;;; breadth first search
+;;; find the shortest path between two nodes in an unweighted, undirected graph
 ;;; partial solutions are stored on the queue as ordered lists of node names
-;;; check if start and goal are same?
-;;; check if neighbour is goal sooner?
-;;; can this handle cases where no path exists?
-
+;;; >(set-graph '((a b) (b a c) (c b d) (d c)))
+;;; >(print-bfs 'a 'd)
+;;; >(print-bfs 'a 'z)
 (defun bfs (start goal)
   (init-queue)
   (enqueue (list start))
@@ -14,9 +12,8 @@
   (labels ((check-next (front)
                        (cond ((null front) nil) ; exhausted all potential solution paths, none found
                              ((equal (car front) goal) (reverse front)) ; return found solution
-                             ((member (car front) visited) (check-next (dequeue)))
-                             (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) 
-                                                      (set-difference (neighbours (car front)) visited))) ; add potential solution paths to queue to be checked later
+                             ((member (car front) visited) (check-next (dequeue))) ; skip a node that has already been visited
+                             (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (set-difference (neighbours (car front)) visited))) ; add potential solution paths to queue to be checked later
                                 (setq visited (cons (car front) visited)) ; add current node to visited
                                 (check-next (dequeue))))))
           (check-next (dequeue))))
@@ -32,10 +29,10 @@
 
 ;;; graph implementation
 ;;; graph is a list of nodes
+;;; for unweighted, undirected graph
 ;;; a node is a list whose first element is the name of the node
 ;;; and whose remaining elements are the names of any neighbours
 ;;; >(set-graph '((a b) (b a c) (c b d) (d c)))
-
 (setq graph nil)
 (defun set-graph (graph-as-list)
   (setf graph graph-as-list))
@@ -65,7 +62,6 @@
 
 
 ;;; queue implementation
-
 (defun init-queue ()
   (setq queue nil))
 
@@ -89,11 +85,3 @@
   (let ((front-element (front)))
     (setf queue (cdr queue))
     front-element))
-
-
-
-; tests
-
-(set-graph '((a b) (b a c) (c b d) (d c)))
-(print-bfs 'a 'd)
-(print-bfs 'a 'z)
