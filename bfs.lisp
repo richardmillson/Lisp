@@ -11,12 +11,12 @@
   (enqueue (list start))
   (setq visited nil)
   (labels ((check-next (front)
-                       (format nil "~a" front)
                        (cond ((null front) nil) ; exhausted all potential solution paths, none found
                              ((equal (car front) goal) (reverse front)) ; return found solution
                              ((member (car front) visited) (check-next (dequeue)))
-                             (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) (neighbours (car front)))) ; add potential solution paths to queue to be checked later
-                                (cons (car front) visited) ; add current node to visited
+                             (t (enqueue-list (mapcar #'(lambda (x) (cons x front)) 
+                                                      (set-difference (neighbours (car front)) visited))) ; add potential solution paths to queue to be checked later
+                                (setq visited (cons (car front) visited)) ; add current node to visited
                                 (check-next (dequeue))))))
           (check-next (dequeue))))
 
