@@ -45,7 +45,7 @@
 ; >(uniquep '(1 2 3) '(2 3 1))
 ; t
 (defun uniquep (cycle-a cycle-b) 
-  (some #'(lambda (perm-cycle-b) (equal cycle-a perm-cycle-b)) ))
+  (some #'(lambda (perm-cycle-b) (equal cycle-a perm-cycle-b)) (all-perms cycle-b)))
 
 ; permute 
 ; >(permute '(1 2 3))
