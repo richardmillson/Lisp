@@ -34,13 +34,37 @@
 
 ; determine if two cycles alpha and beta are disjoint
 ; TODO cycle representation is not unique, need to detect this
-(defun disjoint? (alpha beta)
-  (intersection alpha beta))
+; >(intersection '(1 2 3) '(4 5 6) :test (lambda (a b) (equal a (- b 1))))
+; (3)
+; >(intersection '(4 5 6) '(1 2 3) :test (lambda (a b) (equal a (- b 1))))
+; nil
+(defun disjointp (alpha beta)
+  (intersection alpha beta :test nil))
+
+; determine if two cycles are unique up to order
+; >(uniquep '(1 2 3) '(2 3 1))
+; t
+(defun uniquep (cycle-a cycle-b) 
+  (if (= (length cycle-a) (length cycle-b))
+      (some #'(lambda (perm-cycle-b) (equal cycle-a perm-cycle-b)) )
+      nil))
+
+; permute 
+; >(permute '(1 2 3))
+; (2 3 1)
+(defun permute (cycle)
+  (append (cdr cycle) (list (car cycle))))
+
+; >(prod '((1 2)(3)) '((1)(2 3)))
+; 
+(defun prod (alpha beta)
+  nil)
 
 ; return the orbit of element i in alpha
 ; orbit_{alpha}(i) = {\alpha^k(i) : k >= 0} subset X_n
+; alpha is in disjoint cycle representation
 (defun orbit (i alpha)
-  (remove-if-not #'(lambda (cycle) (member i cycle)) alpha))
+  (find-if #'(lambda (cycle) (member i cycle)) alpha))
 
 (defun factorization ()
   nil)
@@ -67,13 +91,19 @@
 (defun to-graph (alpha)
   nil)
 
+; >(to-complete '(4 3 2 5 1))
+; (1 4 5)(2 3)
 (defun to-complete (alpha)
   nil)
 
 
 
 ; tests
-; (setq alpha '((1 4 5)(2 3)))
+; (load "perm")
+; (setq alpha '((1 4 5)(2 3))
+;       beta '((1 4)(5)(3 2)))
+; (disjointp alpha beta)
+; (orbit 1 alpha)
 ; (sgn alpha)
 ; (even? alpha)
 ; (odd? alpha)
