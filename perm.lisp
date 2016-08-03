@@ -26,15 +26,15 @@
 
 ; parity
 
-; (defun evenp (alpha)
-;   (= 1 (sgn alpha)))
+(defun even? (alpha)
+  (= 1 (sgn alpha)))
 
-; (defun oddp (alpha)
-;   (= -1 (sgn alpha)))
+(defun odd? (alpha)
+  (= -1 (sgn alpha)))
 
 ; determine if two cycles alpha and beta are disjoint
 ; TODO cycle representation is not unique, need to detect this
-(defun disjointp (alpha beta)
+(defun disjoint? (alpha beta)
   (intersection alpha beta))
 
 ; return the orbit of element i in alpha
@@ -69,3 +69,11 @@
 
 (defun to-complete (alpha)
   nil)
+
+
+
+; tests
+; (setq alpha '((1 4 5)(2 3)))
+; (sgn alpha)
+; (even? alpha)
+; (odd? alpha)
