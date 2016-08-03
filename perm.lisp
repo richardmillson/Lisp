@@ -45,15 +45,23 @@
 ; >(uniquep '(1 2 3) '(2 3 1))
 ; t
 (defun uniquep (cycle-a cycle-b) 
-  (if (= (length cycle-a) (length cycle-b))
-      (some #'(lambda (perm-cycle-b) (equal cycle-a perm-cycle-b)) )
-      nil))
+  (some #'(lambda (perm-cycle-b) (equal cycle-a perm-cycle-b)) ))
 
 ; permute 
 ; >(permute '(1 2 3))
 ; (2 3 1)
 (defun permute (cycle)
   (append (cdr cycle) (list (car cycle))))
+
+; return a list of all permutations of a cycle
+; >(all-perms '(1 2 3))
+; ((2 3 1) (3 1 2) (1 2 3))
+(defun all-perms (cycle)
+  (labels ((next-perm (next-cycle)
+                      (if (equal next-cycle cycle)
+                          (list next-cycle)
+                        (append (list next-cycle) (next-perm (permute next-cycle))))))
+          (next-perm (permute cycle))))
 
 ; >(prod '((1 2)(3)) '((1)(2 3)))
 ; 
