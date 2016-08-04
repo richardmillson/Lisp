@@ -1,4 +1,13 @@
-; implement permutations
+(defpackage :perm
+  (:use :common-lisp)
+  (:export 
+    #:sgn #:even? #:odd? 
+    #:disjointp #:uniquep #:permute
+    #:fix #:move))
+
+(in-package :perm)
+
+; permutations
 
 ; given a permutation in disjoint cycle representation
 ; return the sign of a permutation
@@ -25,24 +34,18 @@
           (exponent b n 1)))
 
 ; parity
-
 (defun even? (alpha)
   (= 1 (sgn alpha)))
-
 (defun odd? (alpha)
   (= -1 (sgn alpha)))
 
 ; determine if two permutations alpha and beta are disjoint
-; >(disjointp '((1)) '((2)))
-; ((1))
-; >(disjointp '((1 2)) '((2 1)))
-; nil
-; >(disjointp '((3)(4)) '((3 4)))
-; ((3)(4))
 (defun disjointp (alpha beta)
-  (intersection alpha beta :test #'uniquep))
+  (nintersection alpha beta :test #'uniquep))
 
 ; TODO disjointp broken, error in computing intersection?
+
+; (disjointp '((1)(2)(3)) '((1 2)(3))))
 
 ; >(intersection '(1 2 3) '(4 5 6) :test (lambda (a b) (equal a (- b 1))))
 ; (3)
@@ -50,8 +53,6 @@
 ; nil
 
 ; determine if two cycles a and b are unique up to order
-; >(uniquep '(1 2 3) '(2 3 1))
-; t
 (defun uniquep (a b) 
   (notany #'(lambda (b-perm) (equal a b-perm)) (all-perms b)))
 
@@ -60,7 +61,7 @@
 ; >(notany #'identity '(nil t))
 ; nil
 
-; permute 
+; permute
 ; >(permute '(1 2 3))
 ; (2 3 1)
 (defun permute (cycle)
@@ -116,17 +117,5 @@
 ; (1 4 5)(2 3)
 (defun to-complete (alpha)
   nil)
-
-
-
-; tests
-; (load "perm")
-; (setq alpha '((1 4 5)(2 3))
-;       beta '((1 4)(5)(3 2)))
-; (disjointp alpha beta)
-; (orbit 1 alpha)
-; (sgn alpha)
-; (even? alpha)
-; (odd? alpha)
 
 
