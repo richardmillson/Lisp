@@ -34,22 +34,26 @@
 
 ; determine if two permutations alpha and beta are disjoint
 ; >(disjointp '((1)) '((2)))
-; t
+; ((1))
 ; >(disjointp '((1 2)) '((2 1)))
 ; nil
+; >(disjointp '((3)(4)) '((3 4)))
+; ((3)(4))
 (defun disjointp (alpha beta)
   (intersection alpha beta :test #'uniquep))
+
+; TODO disjointp broken, error in computing intersection?
 
 ; >(intersection '(1 2 3) '(4 5 6) :test (lambda (a b) (equal a (- b 1))))
 ; (3)
 ; >(intersection '(4 5 6) '(1 2 3) :test (lambda (a b) (equal a (- b 1))))
 ; nil
 
-; determine if two cycles are unique up to order
+; determine if two cycles a and b are unique up to order
 ; >(uniquep '(1 2 3) '(2 3 1))
 ; t
-(defun uniquep (cycle-a cycle-b) 
-  (notany #'(lambda (perm-cycle-b) (equal cycle-a perm-cycle-b)) (all-perms cycle-b)))
+(defun uniquep (a b) 
+  (notany #'(lambda (b-perm) (equal a b-perm)) (all-perms b)))
 
 ; >(notany #'identity '(nil nil))
 ; t
@@ -124,3 +128,5 @@
 ; (sgn alpha)
 ; (even? alpha)
 ; (odd? alpha)
+
+
