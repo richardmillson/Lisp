@@ -63,7 +63,7 @@
   (labels ((next-perm (next-cycle)
                       (if (equal next-cycle cycle)
                           (list next-cycle)
-                        (append (list next-cycle) (next-perm (permute next-cycle))))))
+                          (append (list next-cycle) (next-perm (permute next-cycle))))))
           (next-perm (permute cycle))))
 
 ; >(prod '((1 2)(3)) '((1)(2 3)))
@@ -103,10 +103,26 @@
   nil)
 
 ; >(to-complete '(4 3 2 5 1))
-; (1 4 5)(2 3)
+; ((1 4 5)(2 3))
 (defun to-complete (alpha)
-  nil)
+  (labels ((
+            ))
+          )
+  (remove-duplicates  :test-not #:uniquep))
 
+; given a permutation alpha in graph representation
+; and an element i of alpha
+; construct the oribit of i in alpha
+; uses zero-based arrays
+; >(orbit-in-graph 0 '(1 2 0))
+; (1 2 0)
+(defun orbit-in-graph (i alpha)
+  (let ((j i))
+    (loop until (= j i) do
+          (setq j (mult j alpha))
+          collect j)))
 
-
-
+; >(mult 0 '(1 2 0))
+; 1
+(defun mult (pos perm-graph)
+  (nth pos perm-graph))
