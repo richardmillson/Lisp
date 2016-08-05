@@ -2,7 +2,7 @@
   (:use :common-lisp)
   (:export 
     #:sgn #:even? #:odd? 
-    #:disjointp #:uniquep #:permute
+    #:disjointp #:uniquep #:permute #:all-perms
     #:fix #:move))
 
 (in-package :perm)
@@ -41,25 +41,14 @@
 
 ; determine if two permutations alpha and beta are disjoint
 (defun disjointp (alpha beta)
-  (nintersection alpha beta :test #'uniquep))
+  (null (intersection alpha beta :test-not #'uniquep)))
 
-; TODO disjointp broken, error in computing intersection?
-
-; (disjointp '((1)(2)(3)) '((1 2)(3))))
-
-; >(intersection '(1 2 3) '(4 5 6) :test (lambda (a b) (equal a (- b 1))))
-; (3)
-; >(intersection '(4 5 6) '(1 2 3) :test (lambda (a b) (equal a (- b 1))))
-; nil
+;(defun disjointp (alpha beta)
+;  (intersection (apply alpha beta :test #'uniquep))
 
 ; determine if two cycles a and b are unique up to order
-(defun uniquep (a b) 
+(defun uniquep (a b)
   (notany #'(lambda (b-perm) (equal a b-perm)) (all-perms b)))
-
-; >(notany #'identity '(nil nil))
-; t
-; >(notany #'identity '(nil t))
-; nil
 
 ; permute
 ; >(permute '(1 2 3))
@@ -117,5 +106,7 @@
 ; (1 4 5)(2 3)
 (defun to-complete (alpha)
   nil)
+
+
 
 

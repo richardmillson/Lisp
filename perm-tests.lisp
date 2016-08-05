@@ -15,10 +15,17 @@
   (assert-false (disjointp '((1)(2)(3)) '((1 2)(3)))))
 
 ; (setq alpha '((1 4 5)(2 3)) 
-;  beta '((1 4)(5)(3 2)))
+;   beta '((1 4)(5)(3 2)))
 ; (disjointp alpha beta)
 ; (orbit 1 alpha)
 ; (sgn alpha)
 ; (even? alpha)
 ; (odd? alpha)
 
+
+(disjointp '((1)(2)(3)) '((1 2)(3)))
+
+; >(intersection '(1 2 3) '(4 5 6) :test (lambda (a b) (equal a (- b 1))))
+; (3)
+; >(intersection '(4 5 6) '(1 2 3) :test (lambda (a b) (equal a (- b 1))))
+; nil
