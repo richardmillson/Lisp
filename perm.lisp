@@ -114,15 +114,16 @@
 ; and an element i of alpha
 ; construct the oribit of i in alpha
 ; uses zero-based arrays
-; >(orbit-in-graph 0 '(1 2 0))
-; (1 2 0)
+; >(orbit-in-graph 1 '(2 3 1))
+; (2 3 1)
 (defun orbit-in-graph (i alpha)
   (let ((j i))
     (loop until (= j i) do
           (setq j (mult j alpha))
+          (print j)
           collect j)))
 
-; >(mult 0 '(1 2 0))
-; 1
+; >(mult 1 '(2 3 1))
+; 2
 (defun mult (pos perm-graph)
-  (nth pos perm-graph))
+  (nth (- pos 1) perm-graph))
