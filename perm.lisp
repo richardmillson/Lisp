@@ -104,26 +104,44 @@
 
 ; >(to-complete '(4 3 2 5 1))
 ; ((1 4 5)(2 3))
-(defun to-complete (alpha)
-  (labels ((
-            ))
-          )
-  (remove-duplicates  :test-not #:uniquep))
+; (defun to-complete (alpha)
+;   (labels ((
+;             ))
+;           )
+;   (remove-duplicates (orbit) :test-not #:uniquep))
+
+; given a permutation alpha in graph representation
+; return a list of the orbit of every
+(defun all-orbits ()
+  nil)
 
 ; given a permutation alpha in graph representation
 ; and an element i of alpha
 ; construct the oribit of i in alpha
-; uses zero-based arrays
+; uses one-based arrays
+; until j appears in the constructed orbit
 ; >(orbit-in-graph 1 '(2 3 1))
 ; (2 3 1)
 (defun orbit-in-graph (i alpha)
-  (let ((j i))
-    (loop until (= j i) do
-          (setq j (mult j alpha))
-          (print j)
-          collect j)))
+  (let ((j i) (orbit nil))
+    (loop until (member i orbit) do
+          (setq j (apply-perm j alpha))
+          (setq orbit (append orbit (list j))))
+    orbit))
 
-; >(mult 1 '(2 3 1))
+; apply a permutation in graph representation to an element
+; converts from one-based to zero-based arrays
+; >(apply-perm 1 '(2 3 1))
 ; 2
-(defun mult (pos perm-graph)
+(defun apply-perm (pos perm-graph)
   (nth (- pos 1) perm-graph))
+
+; determine the order of element i in alpha
+; >(order 1 '(2 3 1))
+; 2
+(defun order (i alpha)
+  (let ((j (apply-perm i alpha)) (orbit nil))
+    (loop until (member i orbit) do
+          (setq j (apply-perm j alpha))
+          (print j)
+          count j)))
