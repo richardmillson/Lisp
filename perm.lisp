@@ -1,11 +1,11 @@
-(defpackage :perm
-  (:use :common-lisp)
-  (:export 
-    #:sgn #:even? #:odd? 
-    #:disjointp #:uniquep #:permute #:all-perms
-    #:fix #:move))
+; (defpackage :perm
+;   (:use :common-lisp)
+;   (:export 
+;     #:sgn #:even? #:odd? 
+;     #:disjointp #:uniquep #:permute #:all-perms
+;     #:fix #:move))
 
-(in-package :perm)
+; (in-package :perm)
 
 ; permutations
 
@@ -102,18 +102,26 @@
 (defun to-graph (alpha)
   nil)
 
+(defun to-complete (alpha)
+  (all-orbits alpha))
+
 ; >(to-complete '(4 3 2 5 1))
 ; ((1 4 5)(2 3))
 ; (defun to-complete (alpha)
 ;   (labels ((
 ;             ))
 ;           )
-;   (remove-duplicates (orbit) :test-not #:uniquep))
+;   (remove-duplicates (orbit) :test-not #'uniquep))
 
 ; given a permutation alpha in graph representation
-; return a list of the orbit of every
-(defun all-orbits ()
-  nil)
+; return a list of the orbit of every element
+; remove duplicate cycles
+; >(all-orbits '(2 3 1))
+(defun all-orbits (alpha)
+  (let ((all-orbits nil))
+    (loop for i from 1 to (length alpha) do
+          (setq all-orbits (cons (orbit-in-graph i alpha) all-orbits)))
+    (remove-duplicates all-orbits :test-not #'uniquep)))
 
 ; given a permutation alpha in graph representation
 ; and an element i of alpha
