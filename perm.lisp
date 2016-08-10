@@ -140,8 +140,4 @@
 ; >(order 1 '(2 3 1))
 ; 2
 (defun order (i alpha)
-  (let ((j (apply-perm i alpha)) (orbit nil))
-    (loop until (member i orbit) do
-          (setq j (apply-perm j alpha))
-          (print j)
-          count j)))
+  (length (orbit-in-graph i alpha)))
