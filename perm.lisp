@@ -100,18 +100,12 @@
 ; (1 4 5)(2 3)
 
 (defun to-graph (alpha)
-  nil)
-
-(defun to-complete (alpha)
-  (all-orbits alpha))
+  )
 
 ; >(to-complete '(4 3 2 5 1))
 ; ((1 4 5)(2 3))
-; (defun to-complete (alpha)
-;   (labels ((
-;             ))
-;           )
-;   (remove-duplicates (orbit) :test-not #'uniquep))
+(defun to-complete (alpha)
+  (all-orbits alpha))
 
 ; given a permutation alpha in graph representation
 ; return a list of the orbit of every element
@@ -143,6 +137,11 @@
 ; 2
 (defun apply-perm (pos perm-graph)
   (nth (- pos 1) perm-graph))
+
+; >(apply-c-perm 1 '((1 4 5)(2 3)))
+; 4
+(defun apply-c-perm (pos perm-complete)
+  (some #'identity (mapcar #'(lambda (cycle) (apply-perm pos cycle)) perm-complete)))
 
 ; determine the order of element i in alpha
 ; >(order 1 '(2 3 1))
