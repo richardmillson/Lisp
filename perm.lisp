@@ -127,11 +127,11 @@
 ; >(orbit-g 1 '(2 3 1))
 ; (2 3 1)
 (defun orbit-g (i alpha)
-  (let ((j i) (orbit nil))
-    (loop until (member i orbit) do
+  (let ((j i) (i-orbit nil))
+    (loop until (member i i-orbit) do
           (setq j (apply-g j alpha))
-          (setq orbit (append orbit (list j))))
-    orbit))
+          (setq i-orbit (append i-orbit (list j))))
+    i-orbit))
 
 ; apply a permutation in graph representation to an element
 ; converts from one-based user input to zero-based arrays used by lisp
@@ -144,8 +144,9 @@
 ; to an element i of alpha
 ; >(apply-c 1 '((1 4 5)(2 3)))
 ; 4
-(defun apply-c (i alpha)
-  (position i (orbit-c i alpha)))
+(defun apply-c (i alpha)  
+  (let ((i-orbit (orbit-c i alpha)))
+  (nth (mod (+ 1 (position i i-orbit)) (length i-orbit)) i-orbit)))
 
 ; determine the order of element i in alpha
 ; >(order 1 '(2 3 1))
@@ -153,5 +154,5 @@
 (defun order-g (i alpha)
   (length (orbit-g i alpha)))
 
-(defun order-g (i alpha)
+(defun order-c (i alpha)
   (length (orbit-c i alpha)))
