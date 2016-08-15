@@ -101,8 +101,12 @@
 ; disjoint cycle representation of alpha
 ; (1 4 5)(2 3)
 
+
+; >(to-graph '((1 4 5)(2 3)))
+; (4 3 2 5 1)
 (defun to-graph (alpha)
-  nil)
+  (loop for i from 1 to (apply #'+ (mapcar #'length alpha))
+        collect (apply-c i alpha)))
 
 ; >(to-complete '(4 3 2 5 1))
 ; ((1 4 5)(2 3))
@@ -146,7 +150,7 @@
 ; 4
 (defun apply-c (i alpha)  
   (let ((i-orbit (orbit-c i alpha)))
-  (nth (mod (+ 1 (position i i-orbit)) (length i-orbit)) i-orbit)))
+    (nth (mod (+ 1 (position i i-orbit)) (length i-orbit)) i-orbit)))
 
 ; determine the order of element i in alpha
 ; >(order 1 '(2 3 1))
