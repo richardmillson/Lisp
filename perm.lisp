@@ -74,7 +74,9 @@
 ; return the orbit of element i in alpha
 ; orbit_{alpha}(i) = {\alpha^k(i) : k >= 0} subset X_n
 ; alpha is in disjoint cycle representation
-(defun orbit (i alpha)
+; >(orbit 1 '((1 4 5)(2 3)))
+; (1 4 5)
+(defun orbit-c (i alpha)
   (find-if #'(lambda (cycle) (member i cycle)) alpha))
 
 (defun factorization ()
@@ -100,7 +102,7 @@
 ; (1 4 5)(2 3)
 
 (defun to-graph (alpha)
-  )
+  nil)
 
 ; >(to-complete '(4 3 2 5 1))
 ; ((1 4 5)(2 3))
@@ -114,7 +116,7 @@
 (defun all-orbits (alpha)
   (let ((all-orbits nil))
     (loop for i from 1 to (length alpha) do
-          (setq all-orbits (cons (orbit-in-graph i alpha) all-orbits)))
+          (setq all-orbits (cons (orbit-g i alpha) all-orbits)))
     (remove-duplicates all-orbits :test-not #'uniquep)))
 
 ; given a permutation alpha in graph representation
@@ -122,29 +124,34 @@
 ; construct the oribit of i in alpha
 ; uses one-based arrays
 ; until j appears in the constructed orbit
-; >(orbit-in-graph 1 '(2 3 1))
+; >(orbit-g 1 '(2 3 1))
 ; (2 3 1)
-(defun orbit-in-graph (i alpha)
+(defun orbit-g (i alpha)
   (let ((j i) (orbit nil))
     (loop until (member i orbit) do
-          (setq j (apply-perm j alpha))
+          (setq j (apply-g j alpha))
           (setq orbit (append orbit (list j))))
     orbit))
 
 ; apply a permutation in graph representation to an element
-; converts from one-based to zero-based arrays
-; >(apply-perm 1 '(2 3 1))
+; converts from one-based user input to zero-based arrays used by lisp
+; >(apply-g 1 '(2 3 1))
 ; 2
-(defun apply-perm (pos perm-graph)
+(defun apply-g (pos perm-graph)
   (nth (- pos 1) perm-graph))
 
-; >(apply-c-perm 1 '((1 4 5)(2 3)))
+; apply a permutation alpha in complete cycle representation 
+; to an element i of alpha
+; >(apply-c 1 '((1 4 5)(2 3)))
 ; 4
-(defun apply-c-perm (pos perm-complete)
-  (some #'identity (mapcar #'(lambda (cycle) (apply-perm pos cycle)) perm-complete)))
+(defun apply-c (i alpha)
+  (position i (orbit-c i alpha)))
 
 ; determine the order of element i in alpha
 ; >(order 1 '(2 3 1))
 ; 2
-(defun order (i alpha)
-  (length (orbit-in-graph i alpha)))
+(defun order-g (i alpha)
+  (length (orbit-g i alpha)))
+
+(defun order-g (i alpha)
+  (length (orbit-c i alpha)))
