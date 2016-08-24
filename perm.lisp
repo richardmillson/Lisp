@@ -79,9 +79,6 @@
 (defun orbit-c (i alpha)
   (find-if #'(lambda (cycle) (member i cycle)) alpha))
 
-(defun factorization ()
-  nil)
-
 ; X_n = {1, 2, ..., n}
 ; move(alpha) = {i in X_n : alpha(i) != i}
 (defun move (alpha)
@@ -108,6 +105,7 @@
   (loop for i from 1 to (apply #'+ (mapcar #'length alpha))
         collect (apply-c i alpha)))
 
+; find the factorization
 ; >(to-complete '(4 3 2 5 1))
 ; ((1 4 5)(2 3))
 (defun to-complete (alpha)
