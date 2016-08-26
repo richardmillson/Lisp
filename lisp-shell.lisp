@@ -340,7 +340,7 @@
         (t (print (apply-substitutions goal
                                        (subst-list (head-stream
                                                      substitution-stream))))
-           (write-string “cf =“)
+           (write-string "cf =")
            (prin1 (subst-cf (head-stream
                               substitution-stream)))
            (terpri)
@@ -361,12 +361,12 @@
 
 (defun ask-rec (query)
   (prin1 query)
-  (write-string “>“)
+  (write-string ">")
   (let ((answer (read)))
     (cond ((equal answer 'y) 1)
           ((equal answer 'n) – 1)
           (t (print
-               “answer must be y or n”)
+               "answer must be y or n”)
              (terpri)
              (ask-rec query)))))
 

@@ -1,26 +1,31 @@
-; stream
 
-; cons-stream adds a new first element to a stream.
+; from AI Algorithms, Data Structures, and Idioms in Prolog, Lisp, and Java by George Luger
+
+
+
+; streams
+
+;;; cons-stream adds a new first element to a stream.
 (defun cons-stream (element stream)
   (cons element stream))
 
-; head-stream returns the first element of the stream.
+;;; head-stream returns the first element of the stream.
 (defun head-stream (stream) 
   (car stream))
 
-; tail-stream returns the stream with first element deleted.
+;;; tail-stream returns the stream with first element deleted.
 (defun tail-stream (stream) 
   (cdr stream))
 
-; empty-stream-p is true if the stream is empty.
+;;; empty-stream-p is true if the stream is empty.
 (defun empty-stream-p (stream) 
   (null stream))
 
-; make-empty-stream creates an empty stream.
+;;; make-empty-stream creates an empty stream.
 (defun make-empty-stream () 
   nil)
 
-; combine-stream appends two streams.
+;;; combine-stream appends two streams.
 (defun combine-streams (stream1 stream2)
   (cond ((empty-stream-p stream1) stream2)
         (t (cons-stream (head-stream stream1)
@@ -29,6 +34,8 @@
 
 ; logic programming interpreter shell
 
+;;; reads goals and attempts to satisfy them 
+;;; against the logic database bound to *assertions*
 (defun logic-shell ()
   (print '? )
   (let ((goal (read)))
@@ -37,6 +44,7 @@
              (terpri)
              (logic-shell)))))
 
+;;; recursive call to solve solves the goal under each substitution set
 (defun solve (goal substitutions)
   (declare (special *assertions*))
   (if (conjunctive-goal-p goal)
@@ -45,6 +53,7 @@
                                               (make-empty-stream)))
       (infer goal substitutions *assertions*)))
 
+;;; passes a stream of substitution sets through a sequence of goals
 (defun filter-through-conj-goals (goals substitution-stream)
   (if (null goals) 
       substitution-stream
@@ -52,6 +61,7 @@
         (cdr goals)
         (filter-through-goal (car goals) substitution-stream))))
 
+;;; filters substitution-stream through a single goal
 (defun filter-through-goal (goal substitution-stream)
   (if (empty-stream-p substitution-stream)
       (make-empty-stream)
@@ -59,6 +69,7 @@
         (solve goal (head-stream substitution-stream))
         (filter-through-goal goal (tail-stream substitution-stream)))))
 
+;;; simple goals handled by infer
 (defun infer (goal substitutions kb)
   (if (null kb)
       (make-empty-stream)
@@ -82,6 +93,7 @@
            (terpri)
            (print-solutions goal (tail-stream substitution-stream)))))
 
+;;; replace variables with their values under a substitution set
 (defun apply-substitutions
   (pattern substitution-list)
   (cond ((is-constant-p pattern) pattern)
@@ -184,6 +196,8 @@
 
 (defun add-substitution (var pattern substitution-list)
   (acons var pattern substitution-list))
+
+
 
 ; unification example execution
 
