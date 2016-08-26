@@ -60,6 +60,10 @@
         (t (cons (funcall func (car list))
                  (map-simple func (cdr list))))))
 
+
+(defun map-stream (func stream)
+  nil)
+
 ; applies the test to the first element of the list
 ; if the test returns non-nil, it conses the element onto the result of filter applied to the cdr of the list
 ; otherwise, it just returns the filtered cdr.
@@ -71,6 +75,9 @@
         (t (filter (cdr list-of-elements) test))))
 
 
+(defun filter-stream (stream-of-elements test)
+  (cond ((funcall test (head-stream stream)) (filter-stream (tail-stream stream)))
+        (t (cons-stream (head-stream stream) (filter-stream (tail-stream stream))))))
 
 ; expert system shell
 
