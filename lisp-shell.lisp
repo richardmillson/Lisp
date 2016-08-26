@@ -62,7 +62,9 @@
 
 
 (defun map-stream (func stream)
-  nil)
+  (cond ((null stream) nil)
+        (t (cons (funcall func (head-stream stream))
+                 (map-stream func (tail-stream stream))))))
 
 ; applies the test to the first element of the list
 ; if the test returns non-nil, it conses the element onto the result of filter applied to the cdr of the list
