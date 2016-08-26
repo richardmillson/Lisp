@@ -161,27 +161,6 @@
 ;         (filter-through-goal goal
 ;                              (tail-stream substitution-stream)))))
 
-; simple goals handled by infer
-; (defun infer (goal substitutions kb)
-;   (if (null kb)
-;       (make-empty-stream)
-;       (let* ((assertion
-;                (rename-variables (car kb)))
-;              (match (if (rulep assertion)
-;                         (unify goal (conclusion assertion)
-;                                substitutions)
-;                         (unify goal assertion substitutions))))
-;         (if (equal match 'failed)
-;             (infer goal substitutions (cdr kb))
-;             (if (rulep assertion)
-;                 (combine-streams
-;                   (solve (premise assertion) match)
-;                   (infer goal substitutions
-;                          (cdr kb)))
-;                 (cons-stream match
-;                              (infer goal substitutions
-;                                     (cdr kb))))))))
-
 ; (defun print-solutions (goal substitution-stream)
 ;   (cond ((empty-stream-p substitution-stream)
 ;          nil)
@@ -303,6 +282,7 @@
                                (tail-stream
                                  substitution-stream))))))
 
+; simple goals handled by infer
 (defun infer (goal substitutions kb)
   (if (null kb)
       (make-empty-stream)
@@ -310,9 +290,27 @@
                (rename-variables (car kb)))
              (match (if (rulep assertion)
                         (unify goal (conclusion assertion)
-                               subst-list substitutions))
-                    (unify goal assertion
-                           (subst-list substitutions)))))
+                               substitutions)
+                        (unify goal assertion substitutions))))
+        (if (equal match 'failed)
+            (infer goal substitutions (cdr kb))
+            (if (rulep assertion)
+                (combine-streams
+                  (solve (premise assertion) match)
+                  (infer goal substitutions
+                         (cdr kb)))
+                (cons-stream match
+                             (infer goal substitutions
+                                    (cdr kb))))))))
+
+; p 243
+(defun infer (goal substitutions kb)
+  (if (null kb)
+      (make-empty-stream)
+      (let* ((assertion (rename-variables (car kb)))
+             (match (if (rulep assertion)
+                        (unify goal (conclusion assertion) subst-list substitutions))
+                    (unify goal assertion (subst-list substitutions)))))
       (if (equal match 'failed)
           (infer goal substitutions
                  (cdr kb))
@@ -327,7 +325,7 @@
                 (subst-record match
                               (fact-cf assertion))
                 (infer goal substitutions
-                       (cdr kb)))))))
+                       (cdr kb))))))))
 
 (defun solve-rule (rule substitutions)
   (map-stream
