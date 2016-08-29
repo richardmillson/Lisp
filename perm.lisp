@@ -69,7 +69,8 @@
 ; >(prod '((1 2)(3)) '((1)(2 3)))
 ; 
 (defun prod (alpha beta)
-  nil)
+  (loop for i from 1 to (apply #'+ (mapcar #'length alpha))
+        collect (apply-c i alpha)))
 
 ; return the orbit of element i in alpha
 ; orbit_{alpha}(i) = {\alpha^k(i) : k >= 0} subset X_n
