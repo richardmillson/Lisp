@@ -47,9 +47,22 @@
         ; take goat
         (rule if (state6 (var x) '(w e w e))
               then (state7 (var x) '(e e e e)) 1)
-        ; (rule if t
-        ;       then (state7 (var x) '(e e e e)))
+        
+        (rule if 
+              then (state7 (var x) '(e e e e)))
+        (rule if (and (state0 (var x) '(w w w w))
+                      (state1 (var x) '(e w e w))
+                      
+                      (state2 (var x) '(w w e w))
+                      (state3 (var x) '(e e e w))                      
+                      (state4 (var x) '(w e w w))
+                      
+                      (state5 (var x) '(e e w e))
+                      (state6 (var x) '(w e w e))
+                      (state7 (var x) '(e e e e)))
+              then (path (var x) '((w w w w) (e w e w) (w w e w) (e e e w) (w e w w) (e e w e) (w e w e) (e e e e))))
         ))
+
 
 ; (state7 path-1 (var x))
 
