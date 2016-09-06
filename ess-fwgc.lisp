@@ -51,9 +51,10 @@
         ;       then (state7 (var x) '(e e e e)))
         ))
 
-; (path path-1)
+; (state7 path-1 (var x))
 
 (setq *askables*
+      '(
       (state0 (var x) (var y))
       (state1 (var x) (var y))
       (state2 (var x) (var y))
@@ -62,4 +63,4 @@
       (state5 (var x) (var y))
       (state6 (var x) (var y))
       (state7 (var x) (var y))
-      )
+      ))
