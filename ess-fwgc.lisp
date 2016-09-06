@@ -19,9 +19,9 @@
               then (state2 (var x) '(w w e w)) 1)
         
         
-        ; take wolf
-        (rule if (state2 (var x) '(w w e w))
-              then (state3 (var x) '(e e e w)) 1)
+        ; ; take wolf
+        ; (rule if (state2 (var x) '(w w e w))
+        ;       then (state3 (var x) '(e e e w)) 1)
         ; return with goat
         (rule if (state3 (var x) '(e e e w))
               then (state4 (var x) '(w e w w)) 1)
@@ -30,9 +30,9 @@
               then (state5 (var x) '(e e w e)) 1)
         
         
-        ; take cabbage   
-        (rule if (state2 (var x) '(w w e w))
-              then (state3 (var x) '(e w e e)) 1)
+        ; ; take cabbage   
+        ; (rule if (state2 (var x) '(w w e w))
+        ;       then (state3 (var x) '(e w e e)) 1)
         ; return with goat
         (rule if (state3 (var x) '(e w e e))
               then (state4 (var x) '(w w w e)) 1)
@@ -41,9 +41,9 @@
               then (state5 (var x) '(e e w e)) 1)
         
         
-        ; return
-        (rule if (state5 (var x) '(e e w e))
-              then (state6 (var x) '(w e w e)) 1)
+        ; ; return
+        ; (rule if (state5 (var x) '(e e w e))
+        ;       then (state6 (var x) '(w e w e)) 1)
         ; take goat
         (rule if (state6 (var x) '(w e w e))
               then (state7 (var x) '(e e e e)) 1)
@@ -60,11 +60,14 @@
                       (state5 (var x) '(e e w e))
                       (state6 (var x) '(w e w e))
                       (state7 (var x) '(e e e e)))
-              then (path (var x) '((w w w w) (e w e w) (w w e w) (e e e w) (w e w w) (e e w e) (w e w e) (e e e e))))
+              then (path (var x) a))
         ))
 
-
-; (state7 path-1 (var x))
+; '((w w w w) (e w e w) (w w e w) (e e e w) (w e w w) (e e w e) (w e w e) (e e e e)))
+      
+; (state7 path1 (var x))
+; (state3 path1 (var x))
+; (path path-1 (var x))
 
 (setq *askables*
       '(
