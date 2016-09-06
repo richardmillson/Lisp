@@ -12,58 +12,54 @@
 (setq *assertions* 
       '(
         ; take goat
-        (rule if (state0=w-w-w-w (var x))
-              then (state1=e-w-e-w (var x)) 1)
+        (rule if (state0 (var x) '(w w w w))
+              then (state1 (var x) '(e w e w)) 1)
         ; return
-        (rule if (state1=e-w-e-w (var x))
-              then (state2=w-w-e-w (var x)) 1)
+        (rule if (state1 (var x) '(e w e w))
+              then (state2 (var x) '(w w e w)) 1)
         
         
         ; take wolf
-        (rule if (state2=w-w-e-w (var x))
-              then (state3=e-e-e-w (var x)) 1)
+        (rule if (state2 (var x) '(w w e w))
+              then (state3 (var x) '(e e e w)) 1)
         ; return with goat
-        (rule if (state3=e-e-e-w (var x))
-              then (state4=w-e-w-w (var x)) 1)
+        (rule if (state3 (var x) '(e e e w))
+              then (state4 (var x) '(w e w w)) 1)
         ; take cabbage
-        (rule if (state4=w-e-w-w (var x))
-              then (state5=e-e-w-e (var x)) 1)
+        (rule if (state4 (var x) '(w e w w))
+              then (state5 (var x) '(e e w e)) 1)
         
         
         ; take cabbage   
-        (rule if (state2=w-w-e-w (var x))
-              then (state3=e-w-e-e (var x)) 1)
+        (rule if (state2 (var x) '(w w e w))
+              then (state3 (var x) '(e w e e)) 1)
         ; return with goat
-        (rule if (state3=e-w-e-e (var x))
-              then (state4=w-w-w-e (var x)) 1)
+        (rule if (state3 (var x) '(e w e e))
+              then (state4 (var x) '(w w w e)) 1)
         ; take wolf
-        (rule if (state4=w-w-w-e (var x))
-              then (state5=e-e-w-e (var x)) 1)
+        (rule if (state4 (var x) '(w w w e))
+              then (state5 (var x) '(e e w e)) 1)
         
         
         ; return
-        (rule if (state5=e-e-w-e (var x))
-              then (state6=w-e-w-e (var x)) 1)
+        (rule if (state5 (var x) '(e e w e))
+              then (state6 (var x) '(w e w e)) 1)
         ; take goat
-        (rule if (state6=w-e-w-e (var x))
-              then (state7=e-e-e-e (var x)) 1)
+        (rule if (state6 (var x) '(w e w e))
+              then (state7 (var x) '(e e e e)) 1)
         ; (rule if t
-        ;       then (state7=e-e-e-e (var x)))
+        ;       then (state7 (var x) '(e e e e)))
         ))
 
 ; (path path-1)
 
 (setq *askables*
-      (state0=w-w-w-w (var x))
-      (state1=e-w-e-w (var x))
-      (state2=w-w-e-w (var x))
-      
-      (state3=e-e-e-w (var x))
-      (state4=w-e-w-w (var x))
-      
-      (state3=e-w-e-e (var x))
-      (state4=w-w-w-e (var x))
-      
-      (state5=e-e-w-e (var x))
-      (state6=w-e-w-e (var x))
+      (state0 (var x) (var y))
+      (state1 (var x) (var y))
+      (state2 (var x) (var y))
+      (state3 (var x) (var y))
+      (state4 (var x) (var y))
+      (state5 (var x) (var y))
+      (state6 (var x) (var y))
+      (state7 (var x) (var y))
       )
