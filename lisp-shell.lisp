@@ -145,6 +145,16 @@
 ; rules are in the format (rule if <premise> then <conclusion> <cf>)
 ; where <cf> is the certainty factor
 
+;;; load knowledge base from separate file
+(defun start-shell ()
+  (prin1  'name-of-file-containg-knowledge-base-as-string> )
+  (let ((file-name (read)))
+    (terpri)
+    (cond ((equal file-name 'quit) 'bye)
+          (t (load file-name)
+             (terpri)
+             (lisp-shell)))))
+
 ;;; top level interpreter loop
 (defun lisp-shell ()
   (declare (special *case-specific-data*))
